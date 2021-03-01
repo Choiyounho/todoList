@@ -1,5 +1,7 @@
 package com.soten.todolist
 
+import android.graphics.Paint
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +13,8 @@ data class Todo(
 
 class TodoAdapter(
     private val dataSet: List<Todo>,
-    val onClickDeleteIcon: (todo: Todo) -> Unit
+    val onClickDeleteIcon: (todo: Todo) -> Unit,
+    val onClickItem: (todo: Todo) -> Unit
 ) :
     RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
@@ -27,6 +30,23 @@ class TodoAdapter(
     override fun onBindViewHolder(todoViewHolder: TodoViewHolder, position: Int) {
         val todo = dataSet[position]
         todoViewHolder.binding.textViewTodo.text = todo.text
+
+        if (todo.isDone) {
+            todoViewHolder.binding.textViewTodo.apply {
+                paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                setTypeface(null, Typeface.ITALIC)
+            }
+        } else {
+            todoViewHolder.binding.textViewTodo.apply {
+                paintFlags = 0
+                setTypeface(null, Typeface.NORMAL)
+            }
+        }
+
+        todoViewHolder.binding.root.setOnClickListener {
+            onClickItem.invoke(todo)
+        }
+
         todoViewHolder.binding.icDelete.setOnClickListener {
             onClickDeleteIcon.invoke(todo)
         }

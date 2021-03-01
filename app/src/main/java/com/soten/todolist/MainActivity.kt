@@ -17,11 +17,15 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        binding.recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
-        binding.recyclerview.adapter = TodoAdapter(data,
+        binding.recyclerview.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = TodoAdapter(data,
                 onClickDeleteIcon = {
                     deleteTodo(it)
+                }, onClickItem = {
+                    okTodo(it)
                 })
+        }
 
         binding.buttonAdd.setOnClickListener {
             addTodo()
@@ -38,7 +42,11 @@ class MainActivity : AppCompatActivity() {
     private fun deleteTodo(todo: Todo) {
         data.remove(todo)
         binding.recyclerview.adapter?.notifyDataSetChanged()
+    }
 
+    private fun okTodo(todo: Todo) {
+        todo.isDone = !todo.isDone
+        binding.recyclerview.adapter?.notifyDataSetChanged()
     }
 
 }
