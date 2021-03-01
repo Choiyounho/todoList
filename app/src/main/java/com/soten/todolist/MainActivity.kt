@@ -3,6 +3,7 @@ package com.soten.todolist
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.soten.todolist.databinding.ActivityMainBinding
 
@@ -21,13 +22,11 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerview.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = TodoAdapter(
-                viewModel.data,
+                emptyList(),
                 onClickDeleteIcon = {
                     viewModel.deleteTodo(it)
-                    binding.recyclerview.adapter?.notifyDataSetChanged()
                 }, onClickItem = {
                     viewModel.okTodo(it)
-                    binding.recyclerview.adapter?.notifyDataSetChanged()
                 })
         }
 
@@ -37,6 +36,10 @@ class MainActivity : AppCompatActivity() {
             binding.editTextDescription.setText("")
             binding.recyclerview.adapter?.notifyDataSetChanged()
         }
+
+        viewModel.todoLiveData.observe(this@MainActivity, Observer {
+            (binding.recyclerview.adapter as TodoAdapter).setData(it)
+        })
     }
 
 }

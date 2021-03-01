@@ -12,7 +12,7 @@ data class Todo(
 )
 
 class TodoAdapter(
-    private val dataSet: List<Todo>,
+    private var dataSet: List<Todo>,
     val onClickDeleteIcon: (todo: Todo) -> Unit,
     val onClickItem: (todo: Todo) -> Unit
 ) :
@@ -53,5 +53,10 @@ class TodoAdapter(
     }
 
     override fun getItemCount() = dataSet.size
+
+    fun setData(newData: List<Todo>) {
+        dataSet = newData
+        notifyDataSetChanged()
+    }
 
 }
