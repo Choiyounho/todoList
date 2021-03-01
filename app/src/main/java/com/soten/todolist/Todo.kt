@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.soten.todolist.databinding.ItemTodoBinding
 
-data class Todo(val text: String, var isDone: Boolean)
+data class Todo(val text: String, var isDone: Boolean = false)
 
 class TodoAdapter(private val dataSet: List<Todo>) :
     RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {

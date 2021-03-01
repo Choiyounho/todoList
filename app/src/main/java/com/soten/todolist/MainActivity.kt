@@ -17,10 +17,18 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        data.add(Todo("test1", false))
-        data.add(Todo("test12", false))
-
         binding.recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
         binding.recyclerview.adapter = TodoAdapter(data)
+
+        binding.buttonAdd.setOnClickListener {
+            addTodo()
+        }
     }
+
+    private fun addTodo() {
+        val todo = Todo(binding.editTextDescription.text.toString())
+        data.add(todo)
+        binding.recyclerview.adapter?.notifyDataSetChanged()
+    }
+
 }
