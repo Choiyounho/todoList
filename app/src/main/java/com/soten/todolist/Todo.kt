@@ -5,9 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.soten.todolist.databinding.ItemTodoBinding
 
-data class Todo(val text: String, var isDone: Boolean = false)
+data class Todo(
+    val text: String, var isDone: Boolean = false
+)
 
-class TodoAdapter(private val dataSet: List<Todo>) :
+class TodoAdapter(
+    private val dataSet: List<Todo>,
+    val onClickDeleteIcon: (todo: Todo) -> Unit
+) :
     RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
     class TodoViewHolder(val binding: ItemTodoBinding) : RecyclerView.ViewHolder(binding.root)
@@ -20,7 +25,11 @@ class TodoAdapter(private val dataSet: List<Todo>) :
     }
 
     override fun onBindViewHolder(todoViewHolder: TodoViewHolder, position: Int) {
-        todoViewHolder.binding.textViewTodo.text = dataSet[position].text
+        val todo = dataSet[position]
+        todoViewHolder.binding.textViewTodo.text = todo.text
+        todoViewHolder.binding.icDelete.setOnClickListener {
+            onClickDeleteIcon.invoke(todo)
+        }
     }
 
     override fun getItemCount() = dataSet.size
