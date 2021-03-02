@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.DocumentSnapshot
 import com.soten.todolist.databinding.ItemTodoBinding
 
 data class Todo(
@@ -12,9 +13,9 @@ data class Todo(
 )
 
 class TodoAdapter(
-    private var dataSet: List<Todo>,
-    val onClickDeleteIcon: (todo: Todo) -> Unit,
-    val onClickItem: (todo: Todo) -> Unit
+    private var dataSet: List<DocumentSnapshot>,
+    val onClickDeleteIcon: (todo: DocumentSnapshot) -> Unit,
+    val onClickItem: (todo: DocumentSnapshot) -> Unit
 ) :
     RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
@@ -29,9 +30,9 @@ class TodoAdapter(
 
     override fun onBindViewHolder(todoViewHolder: TodoViewHolder, position: Int) {
         val todo = dataSet[position]
-        todoViewHolder.binding.textViewTodo.text = todo.text
+        todoViewHolder.binding.textViewTodo.text = todo.getString("text") ?: ""
 
-        if (todo.isDone) {
+        if (todo.getBoolean("isDone") == true) {
             todoViewHolder.binding.textViewTodo.apply {
                 paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 setTypeface(null, Typeface.ITALIC)
@@ -54,7 +55,7 @@ class TodoAdapter(
 
     override fun getItemCount() = dataSet.size
 
-    fun setData(newData: List<Todo>) {
+    fun setData(newData: List<DocumentSnapshot>) {
         dataSet = newData
         notifyDataSetChanged()
     }

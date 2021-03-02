@@ -53,8 +53,6 @@ class MainActivity : AppCompatActivity() {
         binding.buttonAdd.setOnClickListener {
             val todo = Todo(binding.editTextDescription.text.toString())
             viewModel.addTodo(todo)
-            binding.editTextDescription.setText("")
-            binding.recyclerview.adapter?.notifyDataSetChanged()
         }
 
         viewModel.todoLiveData.observe(this@MainActivity, Observer {
@@ -69,7 +67,7 @@ class MainActivity : AppCompatActivity() {
             val response = IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
-                val user = FirebaseAuth.getInstance().currentUser
+                viewModel.fetchData()
             } else {
                 finish()
             }
