@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         binding.buttonAdd.setOnClickListener {
             val todo = Todo(binding.editTextDescription.text.toString())
             viewModel.addTodo(todo)
+            binding.editTextDescription.setText("")
         }
 
         viewModel.todoLiveData.observe(this@MainActivity, Observer {

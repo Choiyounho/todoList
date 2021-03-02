@@ -1,5 +1,6 @@
 package com.soten.todolist
 
+import android.widget.EditText
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -49,8 +50,11 @@ class TodoViewModel : ViewModel() {
     }
 
     fun okTodo(todo: DocumentSnapshot) {
-//        todo.isDone = !todo.isDone
-//        todoLiveData.value = data
+        FirebaseAuth.getInstance().currentUser?.let { user ->
+            db.collection(user.uid)
+                .document(todo.id)
+                .update("isDone", !(todo.getBoolean("isDone") ?: false))
+        }
     }
 
 }
