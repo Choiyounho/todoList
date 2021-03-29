@@ -3,9 +3,8 @@ package com.soten.todolist
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.view.*
+import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -50,15 +49,27 @@ class MainActivity : AppCompatActivity() {
                 })
         }
 
+        binding.editTextDescription.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addTodo()
+                return@setOnEditorActionListener true
+            }
+            false
+        }
+
         binding.buttonAdd.setOnClickListener {
-            val todo = Todo(binding.editTextDescription.text.toString())
-            viewModel.addTodo(todo)
-            binding.editTextDescription.setText("")
+            addTodo()
         }
 
         viewModel.todoLiveData.observe(this@MainActivity, Observer {
             (binding.recyclerview.adapter as TodoAdapter).setData(it)
         })
+    }
+
+    private fun addTodo() {
+        val todo = Todo(binding.editTextDescription.text.toString())
+        viewModel.addTodo(todo)
+        binding.editTextDescription.setText("")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -77,14 +88,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun login() {
         val providers = arrayListOf(
-            AuthUI.IdpConfig.EmailBuilder().build())
+            AuthUI.IdpConfig.EmailBuilder().build()
+        )
 
         startActivityForResult(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
                 .build(),
-            RC_SIGN_IN)
+            RC_SIGN_IN
+        )
     }
 
     private fun logout() {

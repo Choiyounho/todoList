@@ -26,6 +26,7 @@
         android:ems="10"
         android:hint="할 일을 입력하세요"
         android:inputType="textPersonName"
+        android:imeOptions="actionDone"
         app:layout_constraintEnd_toStartOf="@+id/button_add"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
