@@ -9,7 +9,8 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.soten.todolist.databinding.ItemTodoBinding
 
 data class Todo(
-    val text: String, var isDone: Boolean = false
+    val text: String,
+    var isCheck: Boolean = false
 )
 
 class TodoAdapter(
@@ -32,7 +33,7 @@ class TodoAdapter(
         val todo = dataSet[position]
         todoViewHolder.binding.textViewTodo.text = todo.getString("text") ?: ""
 
-        if (todo.getBoolean("isDone") == true) {
+        if (todo.getBoolean("check") == true) {
             todoViewHolder.binding.textViewTodo.apply {
                 paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 setTypeface(null, Typeface.ITALIC)

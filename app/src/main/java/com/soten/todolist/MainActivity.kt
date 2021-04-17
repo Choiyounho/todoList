@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -67,6 +68,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addTodo() {
+        if (binding.editTextDescription.text.isEmpty()) {
+            Toast.makeText(applicationContext, "내용을 입력해주세요", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val todo = Todo(binding.editTextDescription.text.toString())
         viewModel.addTodo(todo)
         binding.editTextDescription.setText("")
@@ -76,8 +82,6 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN) {
-            val response = IdpResponse.fromResultIntent(data)
-
             if (resultCode == Activity.RESULT_OK) {
                 viewModel.fetchData()
             } else {
